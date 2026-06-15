@@ -1,0 +1,161 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Award, Quote } from "lucide-react";
+import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
+import { testimonials } from "@/components/site/StaggerTestimonials";
+import { IMG } from "@/lib/site-data";
+
+export const Route = createFileRoute("/recognition")({
+  head: () => ({
+    meta: [
+      { title: "Recognition & Awards — Pearlgifts" },
+      {
+        name: "description",
+        content:
+          "Pearlgifts has been recognized as one of Africa's leading luxury gifting houses. A look at the awards and milestones along the way.",
+      },
+      { property: "og:title", content: "Recognition & Awards — Pearlgifts" },
+      {
+        property: "og:description",
+        content: "Awards, milestones and client recognition for Pearlgifts.",
+      },
+      { property: "og:image", content: IMG.award },
+      { name: "twitter:image", content: IMG.award },
+    ],
+  }),
+  component: RecognitionPage,
+});
+
+const MILESTONES = [
+  {
+    year: "2025",
+    title: "Luxury Gifting House of the Year",
+    body: "Recognized at the West African Luxury & Lifestyle Awards for craft, consistency and client experience.",
+  },
+  {
+    year: "2023",
+    title: "Top 50 Brands to Watch",
+    body: "Featured among the continent's most promising lifestyle brands by an industry publication.",
+  },
+  {
+    year: "2022",
+    title: "Best Corporate Gifting Partner",
+    body: "Awarded by a coalition of HR and marketing leaders for sustained service across 100+ organizations.",
+  },
+];
+
+const CLIENT_VOICES = testimonials.slice(0, 3).map((item) => {
+  const [name, role] = item.by.split(", ");
+  return { quote: item.testimonial, name, role };
+});
+
+function RecognitionPage() {
+  return (
+    <SiteLayout>
+      <PageHeader
+        eyebrow="Recognition"
+        title={
+          <>
+            Honored to be named among{" "}
+            <em className="not-italic text-gradient-gold">the continent's best.</em>
+          </>
+        }
+        description="We do this work for the relationships behind every gift. The recognition that follows is a kind reflection of the care our clients have trusted us with."
+      />
+
+      <section className="pb-20 md:pb-24">
+        <div className="mx-auto max-w-7xl px-5">
+          <div className="overflow-hidden rounded-[2.5rem] bg-[var(--cream)] shadow-luxe">
+            <div className="grid lg:grid-cols-[1.1fr_1fr]">
+              <div className="relative min-h-[520px] lg:min-h-[580px]">
+                <img
+                  src={IMG.award}
+                  alt="Pearlgifts team receiving Outstanding Business Brand of the Year award"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+              <div className="p-10 md:p-16">
+                <div className="inline-flex items-center gap-2 rounded-full bg-[var(--plum)]/8 px-4 py-2 text-[11px] uppercase tracking-[0.22em] text-[var(--plum-deep)]">
+                  <Award className="h-3.5 w-3.5 text-[var(--gold)]" /> 2025 Recognition
+                </div>
+                <h2 className="mt-5 font-display text-3xl md:text-4xl text-[var(--plum-deep)] text-balance">
+                  Outstanding Business Brand of the Year
+                </h2>
+                <p className="mt-5 text-[var(--ink)] leading-relaxed">
+                  We were honored to receive this recognition for craft, consistency and the care
+                  with which we serve the teams behind each gift. It belongs as much to our artisans
+                  and clients as it does to us.
+                </p>
+                <Link
+                  to="/contact"
+                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[var(--plum-deep)] hover:bg-[var(--plum)] px-6 py-3.5 text-sm font-medium text-white shadow-soft transition-all duration-300"
+                >
+                  Work with us <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[var(--cream)] py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+              Milestones
+            </span>
+            <h2 className="mt-4 font-display text-4xl md:text-5xl text-[var(--plum-deep)] text-balance">
+              A decade of considered gifting
+            </h2>
+          </div>
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {MILESTONES.map((m) => (
+              <article key={m.year} className="rounded-3xl bg-white p-8 shadow-soft">
+                <p className="font-display text-5xl text-gradient-gold">{m.year}</p>
+                <h3 className="mt-4 font-display text-2xl text-[var(--plum-deep)]">{m.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--ink)]">{m.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20">
+        <div className="mx-auto max-w-7xl px-5">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs uppercase tracking-[0.3em] text-[var(--gold)]">
+              Client Voices
+            </span>
+            <h2 className="mt-4 font-display text-4xl md:text-5xl text-[var(--plum-deep)] text-balance">
+              Trusted by the teams behind the names you know.
+            </h2>
+          </div>
+          <div className="mt-18 grid gap-7 md:grid-cols-3">
+            {CLIENT_VOICES.map((t) => (
+              <figure
+                key={t.name}
+                className="rounded-3xl bg-white p-8 shadow-soft transition hover:shadow-luxe"
+              >
+                <Quote className="h-7 w-7 text-[var(--gold)]" />
+                <blockquote className="mt-5 font-display text-xl leading-snug text-[var(--plum-deep)]">
+                  "{t.quote}"
+                </blockquote>
+                <figcaption className="mt-8 flex items-center gap-3 border-t border-[var(--plum)]/10 pt-5">
+                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-[var(--plum-deep)] text-[var(--gold)] font-display font-medium">
+                    {t.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <p className="font-medium text-[var(--ink)]">{t.name}</p>
+                    <p className="text-xs text-[var(--ink)]/70">{t.role}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  );
+}

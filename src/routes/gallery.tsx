@@ -1,0 +1,144 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
+import { IMG, VIDEO } from "@/lib/site-data";
+
+export const Route = createFileRoute("/gallery")({
+  head: () => ({
+    meta: [
+      { title: "Atelier Gallery — Pearlgifts" },
+      {
+        name: "description",
+        content:
+          "A glimpse inside Pearlgifts' Lagos atelier: recent commissions, bespoke bamboo cases, engraved keepsakes and the people behind each gift.",
+      },
+      { property: "og:title", content: "Atelier Gallery — Pearlgifts" },
+      {
+        property: "og:description",
+        content: "Recent commissions and behind-the-scenes from our Lagos atelier.",
+      },
+      { property: "og:image", content: IMG.product3 },
+      { name: "twitter:image", content: IMG.product3 },
+    ],
+  }),
+  component: GalleryPage,
+});
+
+type Tile =
+  | { kind: "image"; src: string; alt: string; span?: string; category: string }
+  | { kind: "video"; src: string; span?: string; category: string };
+
+const TILES: Tile[] = [
+  {
+    kind: "image",
+    src: IMG.product1,
+    alt: "Bespoke corporate hamper",
+    span: "md:col-span-2 md:row-span-2",
+    category: "Corporate Gifts",
+  },
+  { kind: "video", src: VIDEO.reel1, span: "", category: "Presentation" },
+  { kind: "image", src: IMG.product2, alt: "Bamboo signature set", category: "High End Gift" },
+  {
+    kind: "image",
+    src: IMG.product3,
+    alt: "Engraved keepsake detail",
+    span: "md:row-span-2",
+    category: "Gift For Her",
+  },
+  { kind: "video", src: VIDEO.reel2, span: "", category: "Delivery" },
+  { kind: "image", src: IMG.product4, alt: "Crystal award piece", category: "Wooden Plaques" },
+  { kind: "image", src: IMG.product5, alt: "Presentation set close-up", category: "Bulk Orders" },
+];
+
+const CATEGORIES = [
+  "All",
+  "Corporate Gifts",
+  "High End Gift",
+  "Gift For Her",
+  "Gift For Him",
+  "Presentation",
+  "Wooden Plaques",
+  "Wallet",
+  "Bulk Orders",
+  "Towel",
+  "Teachers Gifts",
+  "Cufflinks",
+  "Pillows",
+  "Mugs",
+  "Reviews",
+  "Delivery",
+];
+
+function GalleryPage() {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredTiles =
+    activeCategory === "All" ? TILES : TILES.filter((t) => t.category === activeCategory);
+
+  return (
+    <SiteLayout>
+      <PageHeader
+        eyebrow="Atelier Gallery"
+        title={
+          <>
+            A glimpse inside our{" "}
+            <em className="not-italic text-gradient-gold">recent commissions</em>
+          </>
+        }
+        description="Every piece below was hand-finished in our Lagos atelier and delivered within the past quarter."
+      />
+
+      <section className="pb-14 md:pb-20">
+        <div className="mx-auto max-w-7xl px-5">
+          <div className="mb-12 flex flex-wrap justify-center gap-3">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`rounded-xl px-6 py-2.5 text-sm font-medium transition ${
+                  activeCategory === cat
+                    ? "bg-[var(--plum-deep)] text-white shadow-soft"
+                    : "border border-[var(--plum)]/20 text-[var(--plum)] hover:bg-[var(--plum)]/5"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid auto-rows-[240px] grid-cols-2 gap-4 md:grid-cols-4 md:auto-rows-[260px]">
+            {filteredTiles.map((t, i) => (
+              <div
+                key={i}
+                className={`group relative overflow-hidden rounded-3xl bg-[var(--secondary)] ${t.span ?? ""}`}
+              >
+                {t.kind === "image" ? (
+                  <img
+                    src={t.src}
+                    alt={t.alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-105"
+                  />
+                ) : (
+                  <video
+                    src={t.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    className="h-full w-full object-cover"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--plum-deep)]/65 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
+                <div className="absolute inset-x-5 bottom-5 translate-y-3 text-white opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <p className="text-xs uppercase tracking-widest text-[var(--gold)]">Commission</p>
+                  <p className="font-display text-lg">Bespoke piece №{i + 1}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </SiteLayout>
+  );
+}
